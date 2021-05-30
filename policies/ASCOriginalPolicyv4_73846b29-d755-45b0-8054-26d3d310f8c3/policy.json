@@ -1,0 +1,600 @@
+{
+ "properties": {
+  "displayName": "ASCOriginalPolicyv4",
+  "policyType": "Custom",
+  "mode": "All",
+  "metadata": {
+   "category": "Security Center",
+   "createdBy": "d8363d19-55fd-46bf-abc4-bb1d04a5a4f7",
+   "createdOn": "2021-05-29T16:03:50.846006Z",
+   "updatedBy": null,
+   "updatedOn": null
+  },
+  "parameters": {
+   "alertnotification": {
+    "type": "String",
+    "metadata": {
+     "displayName": "AlertNotification",
+     "description": "Enable Alert Notification"
+    },
+    "allowedValues": [
+     "On",
+     "Off"
+    ]
+   },
+   "alertnotificationseverity": {
+    "type": "String",
+    "metadata": {
+     "displayName": "AlertNotificationSeverity",
+     "description": "Enable Notification Severity"
+    },
+    "allowedValues": [
+     "High",
+     "Medium",
+     "Low"
+    ]
+   },
+   "emailrecipients": {
+    "type": "String",
+    "metadata": {
+     "displayName": "emailrecipients",
+     "description": "Email Recipient"
+    },
+    "allowedValues": [
+     "On",
+     "Off"
+    ]
+   },
+   "emailrecipientsrole": {
+    "type": "Array",
+    "metadata": {
+     "displayName": "EmailRecipientsRole",
+     "description": "Email Recipient Role"
+    },
+    "allowedValues": [
+     "Owner",
+     "AccountAdmin",
+     "ServiceAdmin",
+     "Contributor"
+    ]
+   },
+   "securityContactsemail": {
+    "type": "String",
+    "metadata": {
+     "displayName": "securityContactsemail",
+     "description": "Contact Email"
+    }
+   },
+   "virtualMachinesTier": {
+    "type": "String",
+    "metadata": {
+     "displayName": "virtualMachinesTier",
+     "description": "Specifiy whether you want to enable Standard tier for Virtual Machine resource type"
+    },
+    "allowedValues": [
+     "Standard",
+     "Free"
+    ]
+   },
+   "appServicesTier": {
+    "type": "String",
+    "metadata": {
+     "displayName": "appServicesTier",
+     "description": "Specify whether you want to enable Standard tier for Azure App Service resource type"
+    },
+    "allowedValues": [
+     "Standard",
+     "Free"
+    ]
+   },
+   "sqlServersTier": {
+    "type": "String",
+    "metadata": {
+     "displayName": "sqlServersTier",
+     "description": "Specify whether you want to enable Standard tier for PaaS SQL Service resource type"
+    },
+    "allowedValues": [
+     "Standard",
+     "Free"
+    ]
+   },
+   "sqlServerVirtualMachinesTier": {
+    "type": "String",
+    "metadata": {
+     "displayName": "sqlServerVirtualMachinesTier",
+     "description": "Specify whether you want to enable Standard tier for SQL Server on VM resource type"
+    },
+    "allowedValues": [
+     "Standard",
+     "Free"
+    ]
+   },
+   "storageAccountsTier": {
+    "type": "String",
+    "metadata": {
+     "displayName": "storageAccountsTier",
+     "description": "Specify whether you want to enable Standard tier for Storage Account resource type"
+    },
+    "allowedValues": [
+     "Standard",
+     "Free"
+    ]
+   },
+   "kubernetesServiceTier": {
+    "type": "String",
+    "metadata": {
+     "displayName": "kubernetesServiceTier",
+     "description": "Specify whether you want to enable Standard tier for Kubernetes service resource type"
+    },
+    "allowedValues": [
+     "Standard",
+     "Free"
+    ]
+   },
+   "containerRegistryTier": {
+    "type": "String",
+    "metadata": {
+     "displayName": "containerRegistryTier",
+     "description": "Specify whether you want to enable Standard tier for Container Registry resource type"
+    },
+    "allowedValues": [
+     "Standard",
+     "Free"
+    ]
+   },
+   "keyVaultsTier": {
+    "type": "String",
+    "metadata": {
+     "displayName": "keyVaultsTier",
+     "description": "Specify whether you want to enable Standard tier for Key Vault resource type"
+    },
+    "allowedValues": [
+     "Standard",
+     "Free"
+    ]
+   },
+   "dnsTier": {
+    "type": "String",
+    "metadata": {
+     "displayName": "dnsTier",
+     "description": "Specify whether you want to enable Standard tier for DNS Tier resource type"
+    },
+    "allowedValues": [
+     "Standard",
+     "Free"
+    ]
+   },
+   "resourcegroupTier": {
+    "type": "String",
+    "metadata": {
+     "displayName": "resourcegroupTier",
+     "description": "Specify whether you want to enable Standard tier for Resource Group Tier resource type"
+    },
+    "allowedValues": [
+     "Standard",
+     "Free"
+    ]
+   },
+   "OpenSourceRelationalDatabasesTier": {
+    "type": "String",
+    "metadata": {
+     "displayName": "OpenSourceRelationalDatabasesTier",
+     "description": "Specify whether you want to enable Standard tier for Open Source Databases Tier resource type"
+    },
+    "allowedValues": [
+     "Standard",
+     "Free"
+    ]
+   }
+  },
+  "policyRule": {
+   "if": {
+    "anyOf": [
+     {
+      "field": "type",
+      "equals": "Microsoft.Security/pricings"
+     }
+    ]
+   },
+   "then": {
+    "effect": "deployIfNotExists",
+    "details": {
+     "type": "Microsoft.Security/pricings",
+     "deploymentScope": "subscription",
+     "existenceScope": "subscription",
+     "name": "[field('name')]",
+     "roleDefinitionIds": [
+      "/providers/Microsoft.Authorization/roleDefinitions/8e3af657-a8ff-443c-a75c-2fe8c4bcb635"
+     ],
+     "existenceCondition": {
+      "anyOf": [
+       {
+        "allOf": [
+         {
+          "field": "Microsoft.Security/pricings/pricingTier",
+          "equals": "[parameters('appServicesTier')]"
+         },
+         {
+          "field": "name",
+          "equals": "AppServices"
+         }
+        ]
+       },
+       {
+        "allOf": [
+         {
+          "field": "Microsoft.Security/pricings/pricingTier",
+          "equals": "[parameters('containerRegistryTier')]"
+         },
+         {
+          "field": "name",
+          "equals": "ContainerRegistry"
+         }
+        ]
+       },
+       {
+        "allOf": [
+         {
+          "field": "Microsoft.Security/pricings/pricingTier",
+          "equals": "[parameters('keyVaultsTier')]"
+         },
+         {
+          "field": "name",
+          "equals": "KeyVaults"
+         }
+        ]
+       },
+       {
+        "allOf": [
+         {
+          "field": "Microsoft.Security/pricings/pricingTier",
+          "equals": "[parameters('kubernetesServiceTier')]"
+         },
+         {
+          "field": "name",
+          "equals": "KubernetesService"
+         }
+        ]
+       },
+       {
+        "allOf": [
+         {
+          "field": "Microsoft.Security/pricings/pricingTier",
+          "equals": "[parameters('sqlServersTier')]"
+         },
+         {
+          "field": "name",
+          "equals": "SqlServers"
+         }
+        ]
+       },
+       {
+        "allOf": [
+         {
+          "field": "Microsoft.Security/pricings/pricingTier",
+          "equals": "[parameters('sqlServerVirtualMachinesTier')]"
+         },
+         {
+          "field": "name",
+          "equals": "SqlServerVirtualMachines"
+         }
+        ]
+       },
+       {
+        "allOf": [
+         {
+          "field": "Microsoft.Security/pricings/pricingTier",
+          "equals": "[parameters('storageAccountsTier')]"
+         },
+         {
+          "field": "name",
+          "equals": "StorageAccounts"
+         }
+        ]
+       },
+       {
+        "allOf": [
+         {
+          "field": "Microsoft.Security/pricings/pricingTier",
+          "equals": "[parameters('virtualMachinesTier')]"
+         },
+         {
+          "field": "name",
+          "equals": "VirtualMachines"
+         }
+        ]
+       },
+       {
+        "allOf": [
+         {
+          "field": "Microsoft.Security/pricings/pricingTier",
+          "equals": "[parameters('dnsTier')]"
+         },
+         {
+          "field": "name",
+          "equals": "Dns"
+         }
+        ]
+       },
+       {
+        "allOf": [
+         {
+          "field": "Microsoft.Security/pricings/pricingTier",
+          "equals": "[parameters('resourcegroupTier')]"
+         },
+         {
+          "field": "name",
+          "equals": "Arm"
+         }
+        ]
+       },
+       {
+        "allOf": [
+         {
+          "field": "Microsoft.Security/pricings/pricingTier",
+          "equals": "[parameters('OpenSourceRelationalDatabasesTier')]"
+         },
+         {
+          "field": "name",
+          "equals": "OpenSourceRelationalDatabases"
+         }
+        ]
+       }
+      ]
+     },
+     "deployment": {
+      "location": "eastus",
+      "properties": {
+       "mode": "incremental",
+       "parameters": {
+        "securityContactsemail": {
+         "value": "[parameters('securityContactsemail')]"
+        },
+        "alertnotification": {
+         "value": "[parameters('alertnotification')]"
+        },
+        "alertnotificationseverity": {
+         "value": "[parameters('alertnotificationseverity')]"
+        },
+        "emailrecipients": {
+         "value": "[parameters('emailrecipients')]"
+        },
+        "emailrecipientsrole": {
+         "value": "[parameters('emailrecipientsrole')]"
+        },
+        "virtualMachinesTier": {
+         "value": "[parameters('virtualMachinesTier')]"
+        },
+        "appServicesTier": {
+         "value": "[parameters('appServicesTier')]"
+        },
+        "sqlServersTier": {
+         "value": "[parameters('sqlServersTier')]"
+        },
+        "sqlServerVirtualMachinesTier": {
+         "value": "[parameters('sqlServerVirtualMachinesTier')]"
+        },
+        "storageAccountsTier": {
+         "value": "[parameters('storageAccountsTier')]"
+        },
+        "kubernetesServiceTier": {
+         "value": "[parameters('kubernetesServiceTier')]"
+        },
+        "containerRegistryTier": {
+         "value": "[parameters('containerRegistryTier')]"
+        },
+        "keyVaultsTier": {
+         "value": "[parameters('keyVaultsTier')]"
+        },
+        "dnsTier": {
+         "value": "[parameters('dnsTier')]"
+        },
+        "resourcegroupTier": {
+         "value": "[parameters('resourcegroupTier')]"
+        },
+        "OpenSourceRelationalDatabasesTier": {
+         "value": "[parameters('OpenSourceRelationalDatabasesTier')]"
+        }
+       },
+       "template": {
+        "$schema": "https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentTemplate.json#",
+        "contentVersion": "1.0.0.0",
+        "parameters": {
+         "securityContactsemail": {
+          "type": "string"
+         },
+         "alertnotification": {
+          "type": "string"
+         },
+         "alertnotificationseverity": {
+          "type": "string"
+         },
+         "emailrecipients": {
+          "type": "string"
+         },
+         "emailrecipientsrole": {
+          "type": "array"
+         },
+         "virtualMachinesTier": {
+          "type": "string"
+         },
+         "appServicesTier": {
+          "type": "string"
+         },
+         "sqlServersTier": {
+          "type": "string"
+         },
+         "sqlServerVirtualMachinesTier": {
+          "type": "string"
+         },
+         "storageAccountsTier": {
+          "type": "string"
+         },
+         "kubernetesServiceTier": {
+          "type": "string"
+         },
+         "containerRegistryTier": {
+          "type": "string"
+         },
+         "keyVaultsTier": {
+          "type": "string"
+         },
+         "dnsTier": {
+          "type": "string"
+         },
+         "resourcegroupTier": {
+          "type": "string"
+         },
+         "OpenSourceRelationalDatabasesTier": {
+          "type": "string"
+         }
+        },
+        "variables": {},
+        "resources": [
+         {
+          "type": "Microsoft.Security/pricings",
+          "apiVersion": "2018-06-01",
+          "name": "VirtualMachines",
+          "properties": {
+           "pricingTier": "[parameters('virtualMachinesTier')]"
+          }
+         },
+         {
+          "type": "Microsoft.Security/pricings",
+          "apiVersion": "2018-06-01",
+          "name": "AppServices",
+          "dependsOn": [
+           "[concat('Microsoft.Security/pricings/VirtualMachines')]"
+          ],
+          "properties": {
+           "pricingTier": "[parameters('appServicesTier')]"
+          }
+         },
+         {
+          "type": "Microsoft.Security/pricings",
+          "apiVersion": "2018-06-01",
+          "name": "SqlServers",
+          "dependsOn": [
+           "[concat('Microsoft.Security/pricings/AppServices')]"
+          ],
+          "properties": {
+           "pricingTier": "[parameters('sqlServersTier')]"
+          }
+         },
+         {
+          "type": "Microsoft.Security/pricings",
+          "apiVersion": "2018-06-01",
+          "name": "SqlServerVirtualMachines",
+          "dependsOn": [
+           "[concat('Microsoft.Security/pricings/SqlServers')]"
+          ],
+          "properties": {
+           "pricingTier": "[parameters('sqlServerVirtualMachinesTier')]"
+          }
+         },
+         {
+          "type": "Microsoft.Security/pricings",
+          "apiVersion": "2018-06-01",
+          "name": "StorageAccounts",
+          "dependsOn": [
+           "[concat('Microsoft.Security/pricings/SqlServerVirtualMachines')]"
+          ],
+          "properties": {
+           "pricingTier": "[parameters('storageAccountsTier')]"
+          }
+         },
+         {
+          "type": "Microsoft.Security/pricings",
+          "apiVersion": "2018-06-01",
+          "name": "KubernetesService",
+          "dependsOn": [
+           "[concat('Microsoft.Security/pricings/StorageAccounts')]"
+          ],
+          "properties": {
+           "pricingTier": "[parameters('kubernetesServiceTier')]"
+          }
+         },
+         {
+          "type": "Microsoft.Security/pricings",
+          "apiVersion": "2018-06-01",
+          "name": "ContainerRegistry",
+          "dependsOn": [
+           "[concat('Microsoft.Security/pricings/KubernetesService')]"
+          ],
+          "properties": {
+           "pricingTier": "[parameters('containerRegistryTier')]"
+          }
+         },
+         {
+          "type": "Microsoft.Security/pricings",
+          "apiVersion": "2018-06-01",
+          "name": "KeyVaults",
+          "dependsOn": [
+           "[concat('Microsoft.Security/pricings/ContainerRegistry')]"
+          ],
+          "properties": {
+           "pricingTier": "[parameters('keyVaultsTier')]"
+          }
+         },
+         {
+          "type": "Microsoft.Security/pricings",
+          "apiVersion": "2018-06-01",
+          "name": "Dns",
+          "dependsOn": [
+           "[concat('Microsoft.Security/pricings/KeyVaults')]"
+          ],
+          "properties": {
+           "pricingTier": "[parameters('dnsTier')]"
+          }
+         },
+         {
+          "type": "Microsoft.Security/pricings",
+          "apiVersion": "2018-06-01",
+          "name": "Arm",
+          "dependsOn": [
+           "[concat('Microsoft.Security/pricings/Dns')]"
+          ],
+          "properties": {
+           "pricingTier": "[parameters('resourcegroupTier')]"
+          }
+         },
+         {
+          "type": "Microsoft.Security/pricings",
+          "apiVersion": "2018-06-01",
+          "name": "OpenSourceRelationalDatabases",
+          "dependsOn": [
+           "[concat('Microsoft.Security/pricings/Arm')]"
+          ],
+          "properties": {
+           "pricingTier": "[parameters('OpenSourceRelationalDatabasesTier')]"
+          }
+         },
+         {
+          "type": "Microsoft.Security/securityContacts",
+          "apiVersion": "2020-01-01-preview",
+          "name": "default",
+          "properties": {
+           "emails": "[parameters('securityContactsemail')]",
+           "alertNotifications": {
+            "state": "[parameters('alertnotification')]",
+            "minimalSeverity": "[parameters('alertnotificationseverity')]"
+           },
+           "notificationsByRole": {
+            "state": "[parameters('emailrecipients')]",
+            "roles": "[parameters('emailrecipientsrole')]"
+           }
+          }
+         }
+        ],
+        "outputs": {}
+       }
+      }
+     }
+    }
+   }
+  }
+ },
+ "id": "/subscriptions/1428e18b-8cfb-4b8a-9c6f-4d1d5484852d/providers/Microsoft.Authorization/policyDefinitions/73846b29-d755-45b0-8054-26d3d310f8c3",
+ "type": "Microsoft.Authorization/policyDefinitions",
+ "name": "73846b29-d755-45b0-8054-26d3d310f8c3"
+}
