@@ -1,0 +1,35 @@
+{
+ "sku": {
+  "name": "A0",
+  "tier": "Free"
+ },
+ "identity": {
+  "principalId": "3bf80b10-d67d-49e9-8eec-714b4de1ffed",
+  "tenantId": "72f988bf-86f1-41af-91ab-2d7cd011db47",
+  "type": "SystemAssigned"
+ },
+ "properties": {
+  "displayName": "Azure App Service Allow IP Restriction",
+  "policyDefinitionId": "/subscriptions/1428e18b-8cfb-4b8a-9c6f-4d1d5484852d/providers/Microsoft.Authorization/policyDefinitions/9c66206f-1bb9-4a1f-8414-641cc305aad3",
+  "scope": "/subscriptions/1428e18b-8cfb-4b8a-9c6f-4d1d5484852d",
+  "notScopes": [],
+  "parameters": {
+   "cidr": {
+    "value": "122.133.144.0/24"
+   }
+  },
+  "metadata": {
+   "assignedBy": "Sumit Kute",
+   "parameterScopes": {},
+   "createdBy": "d8363d19-55fd-46bf-abc4-bb1d04a5a4f7",
+   "createdOn": "2021-07-28T16:37:16.4870816Z",
+   "updatedBy": null,
+   "updatedOn": null
+  },
+  "enforcementMode": "Default"
+ },
+ "id": "/subscriptions/1428e18b-8cfb-4b8a-9c6f-4d1d5484852d/providers/Microsoft.Authorization/policyAssignments/793c37d7e35e4c9e9ee50fbd",
+ "type": "Microsoft.Authorization/policyAssignments",
+ "name": "793c37d7e35e4c9e9ee50fbd",
+ "location": "eastus"
+}

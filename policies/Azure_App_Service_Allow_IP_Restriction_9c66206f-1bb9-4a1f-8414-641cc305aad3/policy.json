@@ -1,0 +1,113 @@
+{
+ "properties": {
+  "displayName": "Azure App Service Allow IP Restriction",
+  "policyType": "Custom",
+  "mode": "All",
+  "metadata": {
+   "createdBy": "d8363d19-55fd-46bf-abc4-bb1d04a5a4f7",
+   "createdOn": "2021-07-28T16:35:23.4317198Z",
+   "updatedBy": "d8363d19-55fd-46bf-abc4-bb1d04a5a4f7",
+   "updatedOn": "2021-07-28T17:10:21.0206161Z",
+   "category": "App Service"
+  },
+  "parameters": {
+   "effect": {
+    "type": "String",
+    "metadata": {
+     "displayName": "Effect",
+     "description": "Enable or disable the execution of the policy"
+    },
+    "allowedValues": [
+     "DeployIfNotExists"
+    ],
+    "defaultValue": "DeployIfNotExists"
+   },
+   "cidr": {
+    "type": "String",
+    "metadata": {
+     "displayName": "Allow CIDR to App Service ",
+     "description": "Enter the CIDR to be allowed for app service "
+    }
+   }
+  },
+  "policyRule": {
+   "if": {
+    "allOf": [
+     {
+      "field": "type",
+      "equals": "Microsoft.Web/sites"
+     },
+     {
+      "field": "kind",
+      "like": "app*"
+     }
+    ]
+   },
+   "then": {
+    "effect": "[parameters('effect')]",
+    "details": {
+     "type": "Microsoft.Web/sites/config",
+     "existenceCondition": {
+      "field": "Microsoft.Web/sites/config/ipSecurityRestrictions",
+      "equals": "Disabled"
+     },
+     "roleDefinitionIds": [
+      "/providers/Microsoft.Authorization/roleDefinitions/de139f84-1756-47ae-9be6-808fbbe84772"
+     ],
+     "deployment": {
+      "properties": {
+       "mode": "incremental",
+       "parameters": {
+        "webAppName": {
+         "value": "[field('name')]"
+        },
+        "location": {
+         "value": "[field('location')]"
+        },
+        "cidr": {
+         "value": "[parameters('cidr')]"
+        }
+       },
+       "template": {
+        "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+        "contentVersion": "1.0.0.0",
+        "parameters": {
+         "webAppName": {
+          "type": "string"
+         },
+         "location": {
+          "type": "string"
+         },
+         "cidr": {
+          "type": "string"
+         }
+        },
+        "resources": [
+         {
+          "name": "[concat(parameters('webAppName'), '/web')]",
+          "type": "Microsoft.Web/sites/config",
+          "apiVersion": "2020-09-01",
+          "location": "[parameters('location')]",
+          "properties": {
+           "ipSecurityRestrictions": [
+            {
+             "ipAddress": "[parameters('cidr')]",
+             "action": "Allow",
+             "priority": 100,
+             "name": "IP example rule"
+            }
+           ]
+          }
+         }
+        ]
+       }
+      }
+     }
+    }
+   }
+  }
+ },
+ "id": "/subscriptions/1428e18b-8cfb-4b8a-9c6f-4d1d5484852d/providers/Microsoft.Authorization/policyDefinitions/9c66206f-1bb9-4a1f-8414-641cc305aad3",
+ "type": "Microsoft.Authorization/policyDefinitions",
+ "name": "9c66206f-1bb9-4a1f-8414-641cc305aad3"
+}
